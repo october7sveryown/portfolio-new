@@ -10,7 +10,7 @@ import Home from './Home.js';
 import Experience from './Experience.js';
 import Skills from './Skills.js';
 import ChatwithResume from './ChatwithResume.js';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+//import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 // const router = createBrowserRouter([
