@@ -8,6 +8,26 @@
   inherits: false;
 }
 
+@media screen and (max-width: 768px) {
+  
+
+  .col-md-2 {
+    margin-bottom: 12px;
+  }
+
+  .col-md-3{
+    margin-bottom:12px;
+  }
+
+  .jumbotron .container .nav .nav-link{
+    font-size:0.7em;
+    margin: 2px 4px;
+    padding:2px 4px;
+    border:none;
+  }
+
+
+}
 
 body {
   font-family: 'Source Sans 3', sans-serif;

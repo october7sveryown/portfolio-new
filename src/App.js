@@ -21,10 +21,10 @@ function App() {
           <h5>Find me here</h5>
         <div className='row'>
         <div className='col-md-12'>
-          <p><a href=""><FontAwesomeIcon icon={faInstagram} /></a></p>
-          <p><a href=""><FontAwesomeIcon icon={faXTwitter} /></a></p>
-          <p><a href=""><FontAwesomeIcon icon={faGithub} /></a></p>
-          <p><a href=""><FontAwesomeIcon icon={faLinkedin} /></a></p>
+          <p><a href="https://instagram.com/october7sveryown"><FontAwesomeIcon icon={faInstagram} /></a></p>
+          <p><a href="https://twitter.com/itsyash777"><FontAwesomeIcon icon={faXTwitter} /></a></p>
+          <p><a href="https://github.com/october7sveryown"><FontAwesomeIcon icon={faGithub} /></a></p>
+          <p><a href="https://linkedin.com/in/yash-thaker"><FontAwesomeIcon icon={faLinkedin} /></a></p>
         </div>
         </div>
         </div>
