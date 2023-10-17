@@ -113,7 +113,7 @@ const HeroSection = () => {
             role="tabpanel"
             aria-labelledby="nav-chat-tab"
           >
-            <ChatwithResume/>
+            <a href="https://chat-with-resume-app.streamlit.app/" target="_blank" >Chat with Resume</a>
           </div>
         </div>
       </div>
