@@ -63,8 +63,6 @@ const HeroSection = () => {
             </a>
             <a
               className="nav-link blink_me"
-              id="nav-chat-tab"
-              data-bs-toggle="tab"
               href="https://chat-with-resume-app.streamlit.app/"
               target="_blank"
               role="tab"
