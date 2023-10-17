@@ -108,14 +108,6 @@ const HeroSection = () => {
           >
             <Skills/>
           </div>
-          // <div
-          //   className="tab-pane fade"
-          //   id="nav-chat"
-          //   role="tabpanel"
-          //   aria-labelledby="nav-chat-tab"
-          // >
-          //   <a href="https://chat-with-resume-app.streamlit.app/" target="_blank" >Chat with Resume</a>
-          // </div>
         </div>
       </div>
     </div>
