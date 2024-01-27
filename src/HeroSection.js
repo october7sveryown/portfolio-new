@@ -64,6 +64,7 @@ const HeroSection = () => {
             <a
               className="nav-link blink_me"
               href="https://chat-with-resume-app.streamlit.app/"
+              target="_blank"
               role="tab"
               aria-controls="nav-chat"
               aria-selected="false"
@@ -105,7 +106,14 @@ const HeroSection = () => {
           >
             <Skills/>
           </div>
-
+          <div
+            className="tab-pane fade"
+            id="nav-chat"
+            role="tabpanel"
+            aria-labelledby="nav-chat-tab"
+          >
+            <ChatwithResume/>
+          </div>
         </div>
       </div>
     </div>
