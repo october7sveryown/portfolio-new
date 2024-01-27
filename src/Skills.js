@@ -69,6 +69,29 @@ const Skills = () => {
           </div>
         </div>
       </div>
+      <br/>
+      <div class="row">
+      <div className="col-md-2">
+          <div class="card">
+            <div class="card-header">Cloud / Devops</div>
+            <ul class="list-group list-group-flush">
+             <li>AWS</li>
+             <li>Docker</li>
+             <li>Kubernetes</li>
+            </ul>
+          </div>
+        </div>
+        <div className="col-md-2">
+          <div class="card">
+            <div class="card-header">Certifications / Badges</div>
+            <ul class="list-group list-group-flush">
+             <li><a href="https://www.hackerrank.com/certificates/93479938e557" target='_blank'>Java Assessment by Hackerrank</a></li>
+             <li><a href="https://www.credly.com/badges/badb8a2f-8bf1-4a2b-82ac-e8aac67dd80c/public_url">Amazon EKS Knowledge Badge</a></li>
+             <li><a href="https://www.credly.com/badges/b9d9b3b1-e618-480c-929e-f28b7eddab3e/public_url">Introduction to Containers, Kubernetes & OpenShift By IBM</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

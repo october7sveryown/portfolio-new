@@ -28,7 +28,7 @@ const HeroSection = () => {
             >
             Home
             </a>
-            <a
+            {/* <a
               className="nav-link"
               id="nav-profile-tab"
               data-bs-toggle="tab"
@@ -38,7 +38,7 @@ const HeroSection = () => {
               aria-selected="false"
             >
               Experience
-            </a>
+            </a> */}
             <a
               className="nav-link"
               id="nav-project-tab"
@@ -63,9 +63,7 @@ const HeroSection = () => {
             </a>
             <a
               className="nav-link blink_me"
-              id="nav-chat-tab"
-              data-bs-toggle="tab"
-              href="#nav-chat"
+              href="https://chat-with-resume-app.streamlit.app/"
               role="tab"
               aria-controls="nav-chat"
               aria-selected="false"
@@ -83,14 +81,14 @@ const HeroSection = () => {
           >
             <Home />
           </div>
-          <div
+          {/* <div
             className="tab-pane fade"
             id="nav-profile"
             role="tabpanel"
             aria-labelledby="nav-profile-tab"
           >
             <Experience/>
-          </div>
+          </div> */}
           <div
             className="tab-pane fade"
             id="nav-project"
@@ -107,14 +105,7 @@ const HeroSection = () => {
           >
             <Skills/>
           </div>
-          <div
-            className="tab-pane fade"
-            id="nav-chat"
-            role="tabpanel"
-            aria-labelledby="nav-chat-tab"
-          >
-            <ChatwithResume/>
-          </div>
+
         </div>
       </div>
     </div>

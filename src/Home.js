@@ -2,7 +2,7 @@ import React from 'react'
 import ProfImg from './profile-pic (2).png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faFootball, faMusic, faSoccerBall } from '@fortawesome/free-solid-svg-icons';
+import { faDumbbell, faFootball, faMusic, faSoccerBall } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
 
@@ -51,8 +51,8 @@ const Home = () => {
           <h4>Interests</h4>
           <div className='row'>
             <div className='col-md-3'>
-              <h6>Verified poaster</h6>
-              <p className='hero-stat'><FontAwesomeIcon icon={faXTwitter}/></p>
+              <h6>Working out</h6>
+              <p className='hero-stat'><FontAwesomeIcon icon={faDumbbell}/></p>
             </div>
             <div className='col-md-3'>
               <h6>Movies</h6>
