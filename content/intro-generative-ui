@@ -1,0 +1,137 @@
+---
+title: "What is Generative UI and how to get started?"
+publishedAt: "2024-08-02"
+summary: "Getting started with Generative UI using Vercel AI SDK, Llama 3.1 and Groq"
+author: "Yash Thaker"
+---
+
+Generative UI (genUI) is an innovative approach to user interface design that leverages artificial intelligence to create dynamic, personalized experiences for users in real-time. This cutting-edge technology is poised to revolutionize the way we interact with digital products and services.
+
+![Generative UI image](https://media.nngroup.com/media/editor/2024/03/21/genui-personalized-interface-for-each-user-nng.png)
+
+### Key Features of Generative UI
+
+1. **Real-time customization**: Interfaces are dynamically generated to suit individual users' preferences and requirements.
+2. **Context-awareness**: The UI adapts based on factors like user behavior, device type, and environmental conditions.
+3. **Personalization at scale**: Generative UI can accommodate a wide variety of user profiles and experiences.
+4. **Continuous improvement**: Machine learning models learn from user interactions to refine and optimize the interface over time.
+
+### Getting started with Generative UI
+
+To get started, we'll leverage Vercel's [AI SDK](https://sdk.vercel.ai/docs/introduction#generative-ui) which makes it easier to help developers build AI-powered applications.
+
+![Vercel AI SDK image](https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/2p7j27gz2BMdPX2eKWnWW5/4a7bca211c985b21e8b7b481e1375f78/AI_SDK.png)
+
+We'll be using following tech stack for this project:-
+
+- **Next.js (w/ App Router)**
+- **[Groq](https://groq.com) w/ [Llama 3.1](https://llama.meta.com/)**
+
+Let's start!
+
+1. Create project
+```js
+npm create next-app@latest my-ai-app
+```
+
+2. Install dependencies
+```js
+npm add ai @ai-sdk/openai zod
+```
+
+3. Grab API key from Groq's [Cloud console](https://console.groq.com/)
+
+4. Create a route handler, ```app/api/chat/route.ts``` and add the following code:
+```ts
+import { streamText } from "ai";
+import { createOpenAI as createGroq } from "@ai-sdk/openai";
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  //conversation history
+  const { messages } = await req.json();
+
+  //configuring Groq
+  const groq = createGroq({
+    baseURL: "https://api.groq.com/openai/v1",
+    apiKey: process.env.GROQ_API_KEY,
+  });
+
+  //calling llm
+  const result  = await streamText({
+    model: groq("llama-3.1-70b-versatile"),
+    messages : messages
+  });
+
+  //return result as a streamed response object
+  return result.toAIStreamResponse();
+}
+
+```
+
+Let's understand what this code is doing:
+
+- Define an asynchronous `POST` request handler and extract messages from the body of the request. The `messages` variable contains a history of the conversation between you and the chatbot and provides the chatbot with the necessary context to make the next generation.
+- Create a Groq client instance with your API key using ```createGroq``` and set the base URL for Groq
+- Calls the LLM ```llama-3.1-70b-versatile``` using ```streamText``` function
+- The ```streamText``` function returns a ```StreamTextResult```. This result object contains the ```toDataStreamResponse``` function which converts the result to a streamed response object.
+
+This Route Handler creates a POST request endpoint at ```/api/chat```.
+
+5. Use the ```useChat``` hook to handle the response from LLM in our root component file `page.tsx`
+
+```js
+"use client";
+
+import { useChat } from "ai/react";
+
+export default function Home() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  return (
+    <>
+      <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+        <h5 className="font-semibold text-center">
+          Generative UI starter app with Vercel AI SDK, Llama 3.1 and Groq
+        </h5>
+        {messages.map((m) => (
+          <div
+            key={m.id}
+            className="whitespace-pre-wrap p-2 m-2 bg-gray-100 text-black border-1 border-gray-50 rounded-lg"
+          >
+            {m.role === "user" ? "User: " : "AI: "}
+            {m.content}
+          </div>
+        ))}
+
+        <form onSubmit={handleSubmit}>
+          <input
+            className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
+            value={input}
+            placeholder="Say something..."
+            onChange={handleInputChange}
+          />
+        </form>
+      </div>
+    </>
+  );
+}
+```
+
+Let's understand what's happening here,
+
+- The `useChat` hook is used to handle the response from the LLM.
+- The `messages` variable contains the conversation history between the user and the llm.
+- The `input` variable contains the current user input.
+- The `handleInputChange` function is used to update the user input.
+- The `handleSubmit` function is used to send the user input to the LLM.
+
+Voila, you're done! See for yourself by trying it out and play around with it.
+
+You can find the complete code [here](https://github.com/october7sveryown/generative-ui-starter/)
+
+Feel free to reach out if you have any questions or need further clarification. 
+
+Happy coding!
+
