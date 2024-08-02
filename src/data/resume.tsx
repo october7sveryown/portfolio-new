@@ -54,6 +54,7 @@ export const DATA = {
       title: "Freelance Software Developer",
       start: "November 2023",
       end: "Present",
+      logoUrl: "",
       description:
         "Helping companies leverage AI. Building custom software solutions (Web and mobile apps) for clients.",
     },
