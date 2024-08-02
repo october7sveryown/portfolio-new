@@ -10,9 +10,9 @@ export const DATA = {
   location: "Toronto, ON",
   locationLink: "https://www.google.com/maps/place/sanfrancisco",
   description:
-    "Software Engineer. I like building apps and working out.",
+    "Software Engineer",
   summary:
-    "4+ years of experience in tech building cool stuff. Moved to Toronto in 2023 to follow my dreams. Launched my first SaaS in 2024 but failed miserably, however that hasn't stopped me from building more.",
+    "5 years of experience in tech building cool stuff. I get dopamine hits by shipping apps that solve real-world problems.",
   avatarUrl: "/profile-pic.png",
   skills: [
     "Java",
@@ -46,6 +46,17 @@ export const DATA = {
   },
 
   work: [
+    {
+      company: "Yash Thaker",
+      href: "https://yash-thaker.vercel.app",
+      badges: [],
+      location: "Toronto, Canada",
+      title: "Freelance Software Developer",
+      start: "November 2023",
+      end: "Present",
+      description:
+        "Helping companies leverage AI. Building custom software solutions (Web and mobile apps) for clients.",
+    },
     {
       company: "MCX India",
       href: "https://mcxindia.com",
