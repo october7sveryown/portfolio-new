@@ -56,6 +56,7 @@ export const DATA = {
       title: "Software Developer",
       start: "October 2024",
       end: "Present",
+      badges: [],
       logoUrl: "https://funnelx.ai/wp-content/uploads/2025/07/favicon_funnelx.png",
       description: "Building a SaaS product - with Generative AI and Voice features."
 
