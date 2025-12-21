@@ -10,18 +10,21 @@ export const DATA = {
   location: "Toronto, ON",
   locationLink: "https://www.google.com/maps/place/sanfrancisco",
   description:
-    "Software Engineer",
+    "Software Developer, AWS Certified Solutions Architect",
   summary:
-    "5 years of experience in tech building cool stuff. I get dopamine hits by shipping apps that solve real-world problems.",
+    "5+ years of experience in tech building cool stuff. I get dopamine hits by shipping apps that solve real-world problems.",
   avatarUrl: "/profile-pic.png",
   skills: [
+    "Typescript",
+    "Python",
+    "Vue.js",
+    "Langchain",
+    "Generative AI",
     "Java",
     "Spring Boot",
     "Angular",
     "React",
     "Next.js",
-    "Typescript",
-    "Python",
     "Docker",
     "Kubernetes",
     "AWS"
@@ -47,14 +50,25 @@ export const DATA = {
 
   work: [
     {
-      company: "Yash Thaker",
-      href: "https://yash-thaker.vercel.app",
+      company: "FunnelX.ai",
+      href: "https://www.funnelx.ai",
+      location: "Toronto, Canada",
+      title: "Software Developer",
+      start: "October 2024",
+      end: "Present",
+      logoUrl: "https://funnelx.ai/wp-content/uploads/2025/07/favicon_funnelx.png",
+      description: "Building a SaaS product - with Generative AI and Voice features."
+
+    },
+    {
+      company: "Aarohana Technologies",
+      href: "https://aarohana.tech",
       badges: [],
       location: "Toronto, Canada",
       title: "Freelance Software Developer",
-      start: "November 2023",
-      end: "Present",
-      logoUrl: "",
+      start: "January 2024",
+      end: "September 2024",
+      logoUrl: "https://www.facebook.com/61554258112603/videos/",
       description:
         "Helping companies leverage AI. Building custom software solutions (Web and mobile apps) for clients.",
     },
