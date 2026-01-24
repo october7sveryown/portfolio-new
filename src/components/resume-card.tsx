@@ -39,7 +39,7 @@ export const ResumeCard = ({
           </Avatar>
         </div>
         <div className="flex-grow flex-col min-w-0">
-          <div className="flex items-start justify-between gap-x-2 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-x-2 mb-2">
             <h3 className="inline-flex items-center font-semibold leading-none text-sm sm:text-base">
               {title}
               {badges && badges.length > 0 && (
@@ -57,7 +57,7 @@ export const ResumeCard = ({
               )}
               <ChevronRightIcon className="size-4 ml-1 translate-x-0 transform opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100" />
             </h3>
-            <div className="text-sm tabular-nums text-muted-foreground text-right whitespace-nowrap">
+            <div className="text-xs sm:text-sm tabular-nums text-muted-foreground sm:text-right sm:whitespace-nowrap">
               {period}
             </div>
           </div>
