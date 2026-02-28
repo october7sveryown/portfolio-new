@@ -1,0 +1,264 @@
+---
+title: "Using Claude Code: Part 1 — Setup & First Steps"
+publishedAt: "2026-02-28"
+summary: "A hands-on intro to Claude Code — Anthropic's AI coding agent that lives in your terminal. Learn how to install it, configure it, and use it on a real project."
+author: "Yash Thaker"
+---
+
+If you've been writing code for a while, you know the drill — context-switch to docs, context-switch to Stack Overflow, context-switch to ChatGPT, come back, write three lines, repeat. **Claude Code** is Anthropic's answer to that cycle. It's an AI coding agent that runs directly in your terminal, reads your actual codebase, and takes actions — editing files, running commands, creating branches — without you having to copy-paste anything.
+
+This is Part 1 of a series. Here we'll get Claude Code installed, configured, and working on a small project so you can see the basics in action before diving deeper.
+
+---
+
+## What is Claude Code?
+
+Claude Code is a command-line tool (CLI) that wraps Claude — Anthropic's AI — and gives it direct access to your filesystem, shell, and version control. Unlike a chat interface where you paste snippets back and forth, Claude Code can:
+
+- **Read your entire project** and reason about it holistically.
+- **Edit files** directly (with your permission).
+- **Run shell commands** — tests, builds, git operations.
+- **Maintain context** across a long working session.
+
+The mental model is closer to pairing with a developer than talking to a chatbot.
+
+---
+
+## Prerequisites
+
+Before installing, make sure you have:
+
+- **Node.js 18+** — Claude Code ships as an npm package.
+- An **Anthropic API key** — sign up at [console.anthropic.com](https://console.anthropic.com).
+- A terminal (macOS, Linux, or WSL on Windows).
+
+---
+
+## Installation
+
+Install Claude Code globally via npm:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Confirm it installed correctly:
+
+```bash
+claude --version
+```
+
+You should see a version number printed. Now export your API key so Claude Code can authenticate:
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-..."
+```
+
+Add that line to your `~/.zshrc` or `~/.bashrc` so it persists across sessions:
+
+```bash
+echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.zshrc
+source ~/.zshrc
+```
+
+---
+
+## Starting a Session
+
+Navigate to a project directory and run:
+
+```bash
+claude
+```
+
+Claude Code opens an interactive REPL in your terminal. It scans your project structure on startup and is ready for instructions.
+
+```
+✓ Claude Code (1.x.x)
+✓ Loaded project context
+>
+```
+
+Type your instructions in plain English. Claude Code responds, proposes changes, and — depending on your permission settings — either asks for approval or acts directly.
+
+---
+
+## Demo Project: A Simple Todo CLI
+
+Let's walk through a concrete example. We'll scaffold a tiny Node.js CLI todo app and use Claude Code to build features and fix bugs in it.
+
+### 1. Create the project
+
+```bash
+mkdir todo-cli && cd todo-cli
+npm init -y
+touch index.js
+```
+
+Add this starter code to `index.js`:
+
+```javascript
+const args = process.argv.slice(2);
+const command = args[0];
+
+if (command === "add") {
+  console.log(`Added: ${args[1]}`);
+} else if (command === "list") {
+  console.log("Listing todos...");
+} else {
+  console.log("Usage: node index.js [add|list] [task]");
+}
+```
+
+### 2. Open Claude Code in the project
+
+```bash
+claude
+```
+
+### 3. Ask Claude Code to add persistence
+
+Right now the app doesn't save anything — let's fix that with a single prompt:
+
+```
+> Add file-based persistence to this todo CLI. Store tasks in todos.json in the project root. The `add` command should append a task, `list` should print all tasks with indices.
+```
+
+Claude Code will read `index.js`, understand the existing structure, write the updated file, and tell you what it changed:
+
+```
+Reading index.js...
+Updating index.js with file-based persistence using todos.json.
+✓ index.js updated
+```
+
+The resulting code will look something like:
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+const DATA_FILE = path.join(__dirname, "todos.json");
+const args = process.argv.slice(2);
+const command = args[0];
+
+function loadTodos() {
+  if (!fs.existsSync(DATA_FILE)) return [];
+  return JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+}
+
+function saveTodos(todos) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(todos, null, 2));
+}
+
+if (command === "add") {
+  const todos = loadTodos();
+  todos.push({ task: args[1], done: false });
+  saveTodos(todos);
+  console.log(`Added: ${args[1]}`);
+} else if (command === "list") {
+  const todos = loadTodos();
+  if (todos.length === 0) {
+    console.log("No todos yet.");
+  } else {
+    todos.forEach((t, i) => {
+      console.log(`${i + 1}. [${t.done ? "x" : " "}] ${t.task}`);
+    });
+  }
+} else {
+  console.log("Usage: node index.js [add|list|done] [task/index]");
+}
+```
+
+No copy-pasting. No tab-switching. Claude Code read the context and wrote idiomatic code for your existing style.
+
+---
+
+## Essential Commands
+
+Here's a quick reference for the commands and shortcuts you'll use most often:
+
+### Slash Commands (inside the REPL)
+
+| Command | What it does |
+|---|---|
+| `/help` | Lists all available commands and shortcuts |
+| `/clear` | Clears the current conversation context |
+| `/compact` | Compresses conversation history to save context window space |
+| `/review` | Asks Claude Code to review your recent changes |
+| `/init` | Generates a `CLAUDE.md` file with project-specific instructions |
+| `/cost` | Shows how many tokens the current session has used |
+| `/quit` | Exits the Claude Code REPL |
+
+### Permission Flags (at startup)
+
+```bash
+# Ask before every file edit or shell command (default — safest)
+claude
+
+# Auto-approve edits to files only, still ask before running shell commands
+claude --allowedTools Edit,Read,Write,Glob,Grep
+
+# Fully autonomous mode — approves everything (use with caution)
+claude --dangerously-skip-permissions
+```
+
+### One-shot Mode (no REPL)
+
+For quick, single-task automation you can skip the interactive session:
+
+```bash
+claude -p "Add a README to this project with setup instructions"
+```
+
+Claude Code reads the project, writes the file, and exits — great for scripting.
+
+---
+
+## CLAUDE.md — Teaching Claude Your Project
+
+One of the most useful features is `CLAUDE.md`. It's a Markdown file you place in your project root that Claude Code reads at the start of every session. Think of it as a briefing note — coding conventions, architecture decisions, commands to run tests, things Claude should never touch.
+
+Generate a starter file by running inside the REPL:
+
+```
+/init
+```
+
+Or create it manually:
+
+```markdown
+# CLAUDE.md
+
+## Project
+Simple Node.js CLI for managing todos.
+
+## Commands
+- Run: `node index.js [add|list|done] <arg>`
+- No build step required.
+
+## Conventions
+- CommonJS modules only (no ESM).
+- Store data in `todos.json` at project root.
+- Keep `index.js` under 100 lines — split into modules if it grows.
+
+## Do not modify
+- `todos.json` directly — always go through the helper functions.
+```
+
+From now on every Claude Code session in this project starts with that context already loaded.
+
+---
+
+## What's Next
+
+In **Part 2** we'll go deeper:
+
+- Using Claude Code on a real Next.js app.
+- Multi-file refactors and how to review diffs before accepting.
+- Writing custom hooks to automate recurring workflows.
+- Best practices for keeping the context window efficient on large codebases.
+
+For now, try installing Claude Code on a personal project and give it one task — something you've been putting off. See how far it gets on the first try. The learning curve is almost entirely about learning to write clear, scoped prompts rather than anything tool-specific.
+
+Happy coding!
