@@ -5,7 +5,11 @@ summary: "A hands-on intro to Claude Code — Anthropic's AI coding agent that l
 author: "Yash Thaker"
 ---
 
-If you've been writing code for a while, you know the drill — context-switch to docs, context-switch to Stack Overflow, context-switch to ChatGPT, come back, write three lines, repeat. **Claude Code** is Anthropic's answer to that cycle. It's an AI coding agent that runs directly in your terminal, reads your actual codebase, and takes actions — editing files, running commands, creating branches — without you having to copy-paste anything.
+If you've been writing code for a while, you know the drill — context-switch to docs, context-switch to Stack Overflow, context-switch to ChatGPT, come back, write three lines, repeat.
+
+![Developer overwhelmed by too many tabs](https://media3.giphy.com/media/gGyOxv1bN3G7T3XVkt/giphy.gif)
+
+**Claude Code** is Anthropic's answer to that cycle. It's an AI coding agent that runs directly in your terminal, reads your actual codebase, and takes actions — editing files, running commands, creating branches — without you having to copy-paste anything.
 
 This is Part 1 of a series. Here we'll get Claude Code installed, configured, and working on a small project so you can see the basics in action before diving deeper.
 
@@ -87,6 +91,8 @@ Type your instructions in plain English. Claude Code responds, proposes changes,
 
 Let's walk through a concrete example. We'll scaffold a tiny Node.js CLI todo app and use Claude Code to build features and fix bugs in it.
 
+![Let's go!](https://media1.giphy.com/media/5WigrBH4v7XWME6pck/giphy.gif)
+
 ### 1. Create the project
 
 ```bash
@@ -132,6 +138,8 @@ Updating index.js with file-based persistence using todos.json.
 ✓ index.js updated
 ```
 
+![Mind blown](https://media1.giphy.com/media/2fLgzU6ZNbqgj1jJy2/giphy.gif)
+
 The resulting code will look something like:
 
 ```javascript
@@ -171,6 +179,8 @@ if (command === "add") {
 ```
 
 No copy-pasting. No tab-switching. Claude Code read the context and wrote idiomatic code for your existing style.
+
+![It works!](https://media2.giphy.com/media/dIxkmtCuuBQuM9Ux1E/giphy.gif)
 
 ---
 
