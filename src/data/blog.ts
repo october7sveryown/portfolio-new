@@ -6,6 +6,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import { cache } from "react";
 import { unified } from "unified";
 
 type Metadata = {
@@ -38,7 +39,7 @@ export async function markdownToHTML(markdown: string) {
   return p.toString();
 }
 
-export async function getPost(slug: string) {
+export const getPost = cache(async function getPost(slug: string) {
   const filePath = path.join("content", `${slug}.mdx`);
   let source = fs.readFileSync(filePath, "utf-8");
   const { content: rawContent, data: metadata } = matter(source);
@@ -48,7 +49,7 @@ export async function getPost(slug: string) {
     metadata,
     slug,
   };
-}
+});
 
 // Lightweight version — only reads frontmatter, skips markdown rendering.
 // Use this for listing pages that don't need the full HTML content.
