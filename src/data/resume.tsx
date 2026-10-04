@@ -8,11 +8,12 @@ export const DATA = {
   initials: "YT",
   url: "https://yashthaker.dev",
   location: "Toronto, ON",
-  locationLink: "https://www.google.com/maps/place/sanfrancisco",
+  locationLink: "https://www.google.com/maps/place/Toronto,+ON",
   description:
     "Software Developer, AWS Certified Solutions Architect",
   summary:
     "5+ years of experience in tech building cool stuff. I get dopamine hits by shipping apps that solve real-world problems.",
+  now: "Building Generative AI and voice features at FunnelX. Exploring agents, MCP and Claude Code on the side.",
   avatarUrl: "/profile-pic.png",
   skills: [
     "Typescript",
@@ -69,7 +70,7 @@ export const DATA = {
       title: "Freelance Software Developer",
       start: "January 2024",
       end: "September 2024",
-      logoUrl: "https://www.facebook.com/61554258112603/videos/",
+      logoUrl: "",
       description:
         "Helping companies leverage AI. Building custom software solutions (Web and mobile apps) for clients.",
     },
@@ -124,7 +125,7 @@ export const DATA = {
       dates: "Feb 2024 - Mar 2024",
       active: true,
       description:
-        "My first SaaS app. Generates Resume score, professional summary, cover letters and extracts skills using Generative AI. 25+",
+        "My first SaaS app. Generates Resume score, professional summary, cover letters and extracts skills using Generative AI.",
       technologies: [
         "Next.js",
         "Typescript",

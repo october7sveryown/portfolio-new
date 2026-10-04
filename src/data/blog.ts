@@ -64,5 +64,11 @@ function getPostMeta(file: string) {
 export async function getBlogPosts() {
   const dir = path.join(process.cwd(), "content");
   const mdxFiles = getMDXFiles(dir);
-  return mdxFiles.map((file) => getPostMeta(file));
+  return mdxFiles
+    .map((file) => getPostMeta(file))
+    .sort(
+      (a, b) =>
+        new Date(b.metadata.publishedAt).getTime() -
+        new Date(a.metadata.publishedAt).getTime()
+    );
 }

@@ -43,7 +43,7 @@ export function ProjectCard({
   return (
     <Card
       className={cn(
-        "flex flex-col overflow-hidden h-full",
+        "flex flex-col overflow-hidden h-full border transition-colors hover:border-foreground/20",
         className
       )}
     >
@@ -58,30 +58,30 @@ export function ProjectCard({
             loop
             muted
             playsInline
-            className="pointer-events-none mx-auto h-48 sm:h-56 lg:h-48 w-full object-cover object-top"
+            className="pointer-events-none mx-auto h-40 w-full object-cover object-top border-b"
           />
         )}
         {image && (
           <Image
             src={image}
             alt={title}
-            className="h-48 sm:h-56 lg:h-48 w-full overflow-hidden object-cover object-top"
+            className="h-40 w-full overflow-hidden object-cover object-top border-b"
           />
         )}
       </Link>
-      <CardHeader className="px-4 sm:px-6">
+      <CardHeader className="px-4 pb-3">
         <div className="space-y-1">
-          <CardTitle className="mt-1 text-base sm:text-lg">{title}</CardTitle>
+          <CardTitle className="mt-1 text-base font-medium">{title}</CardTitle>
           <time className="font-sans text-xs text-muted-foreground">{dates}</time>
           <div className="hidden font-sans text-xs underline print:visible">
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
-          <Markdown className="prose max-w-full text-pretty font-sans text-xs sm:text-sm text-muted-foreground dark:prose-invert">
+          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {description}
           </Markdown>
         </div>
       </CardHeader>
-      <CardContent className="mt-auto flex flex-col px-4 sm:px-6">
+      <CardContent className="mt-auto flex flex-col px-4 pb-3">
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {tags?.map((tag) => (
@@ -96,7 +96,7 @@ export function ProjectCard({
           </div>
         )}
       </CardContent>
-      <CardFooter className="px-4 sm:px-6 pb-4">
+      <CardFooter className="px-4 pb-4">
         {links && links.length > 0 && (
           <div className="flex flex-row flex-wrap items-start gap-1">
             {links?.map((link, idx) => (

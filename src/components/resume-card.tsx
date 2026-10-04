@@ -1,8 +1,12 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ChevronRightIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface ResumeCardProps {
   logoUrl: string;
@@ -25,46 +29,86 @@ export const ResumeCard = ({
   period,
   description,
 }: ResumeCardProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const expandable = Boolean(description);
+
   return (
-    <Link href={href || "#"} className="block cursor-pointer group">
-      <div className="flex gap-4 lg:gap-6">
-        <div className="flex-none">
-          <Avatar className="border size-16 lg:size-20 bg-muted-background dark:bg-foreground">
-            <AvatarImage
-              src={logoUrl}
-              alt={altText}
-              className="object-contain"
-            />
-            <AvatarFallback>{altText[0]}</AvatarFallback>
-          </Avatar>
-        </div>
-        <div className="flex-grow flex-col min-w-0">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-x-2 mb-2">
-            <h3 className="inline-flex items-center font-semibold leading-none text-sm sm:text-base">
-              {title}
-              {badges && badges.length > 0 && (
-                <span className="inline-flex gap-x-1 ml-2">
-                  {badges.map((badge, index) => (
-                    <Badge
-                      variant="secondary"
-                      className="align-middle text-xs"
-                      key={index}
-                    >
-                      {badge}
-                    </Badge>
-                  ))}
-                </span>
+    <div
+      className={cn(
+        "group -mx-3 flex gap-4 rounded-lg px-3 py-3 transition-colors",
+        expandable && "cursor-pointer hover:bg-muted"
+      )}
+      onClick={() => expandable && setIsExpanded((v) => !v)}
+    >
+      <Avatar className="size-11 flex-none border bg-muted-background dark:bg-foreground">
+        <AvatarImage src={logoUrl} alt={altText} className="object-contain" />
+        <AvatarFallback>{altText[0]}</AvatarFallback>
+      </Avatar>
+      <div className="min-w-0 flex-grow">
+        <div className="flex items-start justify-between gap-x-3">
+          <div className="min-w-0">
+            <h3 className="inline-flex items-center gap-2 font-medium leading-tight">
+              {href ? (
+                <Link
+                  href={href}
+                  target="_blank"
+                  className="underline-offset-4 hover:underline"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {title}
+                </Link>
+              ) : (
+                title
               )}
-              <ChevronRightIcon className="size-4 ml-1 translate-x-0 transform opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100" />
+              {badges?.map((badge) => (
+                <Badge variant="secondary" className="text-xs" key={badge}>
+                  {badge}
+                </Badge>
+              ))}
             </h3>
-            <div className="text-xs sm:text-sm tabular-nums text-muted-foreground sm:text-right sm:whitespace-nowrap">
-              {period}
-            </div>
+            {subtitle && (
+              <div className="mt-0.5 text-sm text-muted-foreground">
+                {subtitle}
+              </div>
+            )}
           </div>
-          {subtitle && <div className="font-sans text-sm text-muted-foreground mb-2">{subtitle}</div>}
-          {description && <div className="text-sm text-muted-foreground leading-relaxed">{description}</div>}
+          <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-muted-foreground sm:text-sm">
+            {period}
+            {expandable && (
+              <button
+                type="button"
+                aria-expanded={isExpanded}
+                aria-label={isExpanded ? "Hide details" : "Show details"}
+                className="rounded p-0.5"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsExpanded((v) => !v);
+                }}
+              >
+                <ChevronDownIcon
+                  className={cn(
+                    "size-4 transition-transform duration-200",
+                    isExpanded && "rotate-180"
+                  )}
+                />
+              </button>
+            )}
+          </div>
         </div>
+        <AnimatePresence initial={false}>
+          {isExpanded && description && (
+            <motion.p
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="overflow-hidden text-sm leading-relaxed text-muted-foreground"
+            >
+              <span className="block pt-2">{description}</span>
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
-    </Link>
+    </div>
   );
 };
