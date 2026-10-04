@@ -20,7 +20,7 @@ export async function generateMetadata({
     summary: description,
     image,
   } = post.metadata;
-  let ogImage = image ? `${DATA.url}${image}` : `${DATA.url}/og?title=${title}`;
+  let ogImage = image ? `${DATA.url}${image}` : `${DATA.url}/og?title=${encodeURIComponent(title)}`;
 
   return {
     title,
@@ -60,45 +60,43 @@ export default async function Blog({
   }
 
   return (
-    <section id="blog" className="section-spacing">
-      <div className="container-md">
-        <script
-          type="application/ld+json"
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BlogPosting",
-              headline: post.metadata.title,
-              datePublished: post.metadata.publishedAt,
-              dateModified: post.metadata.publishedAt,
-              description: post.metadata.summary,
-              image: post.metadata.image
-                ? `${DATA.url}${post.metadata.image}`
-                : `${DATA.url}/og?title=${post.metadata.title}`,
-              url: `${DATA.url}/blog/${post.slug}`,
-              author: {
-                "@type": "Person",
-                name: DATA.name,
-              },
-            }),
-          }}
-        />
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          {post.metadata.title}
-        </h1>
-        <div className="flex justify-between items-center mb-8 pb-8 border-b">
-          <Suspense fallback={<p className="h-5" />}>
-            <p className="text-sm text-muted-foreground">
-              {formatDate(post.metadata.publishedAt)}
-            </p>
-          </Suspense>
-        </div>
-        <article
-          className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: post.source }}
-        ></article>
+    <section id="blog">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.metadata.title,
+            datePublished: post.metadata.publishedAt,
+            dateModified: post.metadata.publishedAt,
+            description: post.metadata.summary,
+            image: post.metadata.image
+              ? `${DATA.url}${post.metadata.image}`
+              : `${DATA.url}/og?title=${encodeURIComponent(post.metadata.title)}`,
+            url: `${DATA.url}/blog/${post.slug}`,
+            author: {
+              "@type": "Person",
+              name: DATA.name,
+            },
+          }),
+        }}
+      />
+      <h1 className="font-serif text-4xl sm:text-5xl tracking-tight text-balance">
+        {post.metadata.title}
+      </h1>
+      <div className="flex justify-between items-center mt-3 mb-10">
+        <Suspense fallback={<p className="h-5" />}>
+          <p className="text-sm text-muted-foreground">
+            {formatDate(post.metadata.publishedAt)}
+          </p>
+        </Suspense>
       </div>
+      <article
+        className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-img:rounded-lg"
+        dangerouslySetInnerHTML={{ __html: post.source }}
+      ></article>
     </section>
   );
 }

@@ -4,12 +4,19 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { Instrument_Serif as FontSerif, Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const fontSerif = FontSerif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
 });
 
 export const metadata: Metadata = {
@@ -26,6 +33,7 @@ export const metadata: Metadata = {
     siteName: `${DATA.name}`,
     locale: "en_US",
     type: "website",
+    images: [{ url: "/og" }],
   },
   robots: {
     index: true,
@@ -41,6 +49,7 @@ export const metadata: Metadata = {
   twitter: {
     title: `${DATA.name}`,
     card: "summary_large_image",
+    images: ["/og"],
   },
   verification: {
     google: "",
@@ -57,8 +66,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6 pb-32",
+          fontSans.variable,
+          fontSerif.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light">

@@ -101,12 +101,11 @@
     background-color: var(--shiki-light-bg);
   }
    
-  @media (prefers-color-scheme: dark) {
-    code[data-theme*=" "],
-    code[data-theme*=" "] span {
-      color: var(--shiki-dark);
-      background-color: var(--shiki-dark-bg);
-    }
+  /* Follow the class-based theme toggle, not the OS setting */
+  .dark code[data-theme*=" "],
+  .dark code[data-theme*=" "] span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
   }
   
   code[data-line-numbers] {
@@ -141,43 +140,6 @@ code[data-line-numbers-max-digits="2"] > [data-line]::before {
  
 code[data-line-numbers-max-digits="3"] > [data-line]::before {
   width: 3rem;
-}
-
-@layer components {
-  /* Container utilities for different section widths */
-  .container-sm {
-    @apply mx-auto w-full max-w-3xl px-6 sm:px-8;
-  }
-
-  .container-md {
-    @apply mx-auto w-full max-w-5xl px-6 sm:px-8 lg:px-12;
-  }
-
-  .container-lg {
-    @apply mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-12;
-  }
-
-  .container-xl {
-    @apply mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12;
-  }
-
-  /* Section spacing */
-  .section-spacing {
-    @apply py-16 sm:py-20 lg:py-24;
-  }
-
-  /* Refined shadows for minimal design */
-  .shadow-subtle {
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
-  }
-
-  .shadow-refined {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  }
-
-  .shadow-elevated {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  }
 }
 
 /* Smooth scroll behavior */
