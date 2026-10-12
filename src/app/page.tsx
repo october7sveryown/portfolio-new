@@ -1,3 +1,4 @@
+import { Chat } from "@/components/chat/chat";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { PostList } from "@/components/post-list";
@@ -68,6 +69,11 @@ export default async function Page() {
               <span className="font-medium">Now: </span>
               <span className="text-muted-foreground">{DATA.now}</span>
             </p>
+          </div>
+        </BlurFade>
+        <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
+          <div className="mt-4">
+            <Chat />
           </div>
         </BlurFade>
       </section>

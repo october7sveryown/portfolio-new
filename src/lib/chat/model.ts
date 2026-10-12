@@ -6,7 +6,7 @@ const DEFAULT_MODEL = "z-ai/glm-4.6";
 
 const MOCK_TEXT =
   "This is **mock mode**: no `OPENROUTER_API_KEY` is set, so this reply is canned. " +
-  "Set the key in `.env.local` to talk to a real model.";
+  "Set it in `.env` or `.env.local` to talk to a real model.";
 
 const usage = {
   inputTokens: { total: 0, noCache: 0, cacheRead: 0, cacheWrite: 0 },
