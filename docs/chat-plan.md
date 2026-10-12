@@ -161,6 +161,7 @@ Each step is one commit on `feature/chat`.
 |---|---|---|
 | `OPENROUTER_API_KEY` | for real responses | OpenRouter access. Mock mode is used when unset. |
 | `CHAT_MODEL` | no | OpenRouter model ID, default `z-ai/glm-5.3-flash` |
+| `CHAT_DAILY_LIMIT` | no | Global daily request cap, default 500 |
 | `UPSTASH_REDIS_REST_URL` | in production | Rate limiting |
 | `UPSTASH_REDIS_REST_TOKEN` | in production | Rate limiting |
 
