@@ -1,9 +1,11 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import type { UIMessage } from "ai";
 import { RotateCcwIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+
+import type { PostMeta } from "@/lib/chat/catalog";
+import type { ChatMessage } from "@/lib/chat/types";
 
 import { ChatInput } from "./chat-input";
 import { Message } from "./message";
@@ -18,9 +20,9 @@ function errorText(error: Error) {
   return "Something went wrong. Please try again.";
 }
 
-export function Chat() {
+export function Chat({ posts }: { posts: PostMeta[] }) {
   const { messages, setMessages, sendMessage, status, stop, error, regenerate } =
-    useChat();
+    useChat<ChatMessage>();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const stickToBottom = useRef(true);
@@ -32,7 +34,7 @@ export function Chat() {
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem(STORAGE_KEY);
-      if (saved) setMessages(JSON.parse(saved) as UIMessage[]);
+      if (saved) setMessages(JSON.parse(saved) as ChatMessage[]);
     } catch {}
     restored.current = true;
   }, [setMessages]);
@@ -76,6 +78,7 @@ export function Chat() {
               key={message.id}
               message={message}
               streaming={status === "streaming" && i === messages.length - 1}
+              posts={posts}
             />
           ))}
           {status === "submitted" && (

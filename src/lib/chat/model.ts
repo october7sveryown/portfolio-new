@@ -1,3 +1,4 @@
+import type { LanguageModelV4StreamPart } from "@ai-sdk/provider";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { simulateReadableStream, type LanguageModel } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
@@ -13,31 +14,56 @@ const usage = {
   outputTokens: { total: 0, text: 0, reasoning: 0 },
 };
 
+function textChunks(text: string): LanguageModelV4StreamPart[] {
+  return [
+    { type: "text-start", id: "t1" },
+    ...text.split(/(?<= )/).map((delta) => ({ type: "text-delta" as const, id: "t1", delta })),
+    { type: "text-end", id: "t1" },
+  ];
+}
+
+function finish(reason: "stop" | "tool-calls"): LanguageModelV4StreamPart {
+  return { type: "finish", finishReason: { unified: reason, raw: reason }, usage };
+}
+
+// Canned replies: a showProjects call when the question mentions projects,
+// a one-line follow-up after the tool result, and MOCK_TEXT otherwise.
 function mockModel() {
   return new MockLanguageModelV4({
     provider: "mock",
     modelId: "mock",
-    doStream: async () => ({
-      stream: simulateReadableStream({
-        initialDelayInMs: 200,
-        chunkDelayInMs: 30,
-        chunks: [
-          { type: "stream-start" as const, warnings: [] },
-          { type: "text-start" as const, id: "t1" },
-          ...MOCK_TEXT.split(/(?<= )/).map((delta) => ({
-            type: "text-delta" as const,
-            id: "t1",
-            delta,
-          })),
-          { type: "text-end" as const, id: "t1" },
+    doStream: async ({ prompt }) => {
+      const last = prompt[prompt.length - 1];
+      const lastText =
+        last?.role === "user"
+          ? last.content.map((part) => (part.type === "text" ? part.text : "")).join(" ")
+          : "";
+
+      let chunks: LanguageModelV4StreamPart[];
+      if (last?.role === "tool") {
+        chunks = [...textChunks("Here are a few projects Yash has built."), finish("stop")];
+      } else if (/project/i.test(lastText)) {
+        chunks = [
           {
-            type: "finish" as const,
-            finishReason: { unified: "stop" as const, raw: "stop" },
-            usage,
+            type: "tool-call",
+            toolCallId: `mock-${Date.now()}`,
+            toolName: "showProjects",
+            input: JSON.stringify({}),
           },
-        ],
-      }),
-    }),
+          finish("tool-calls"),
+        ];
+      } else {
+        chunks = [...textChunks(MOCK_TEXT), finish("stop")];
+      }
+
+      return {
+        stream: simulateReadableStream({
+          initialDelayInMs: 200,
+          chunkDelayInMs: 30,
+          chunks: [{ type: "stream-start", warnings: [] }, ...chunks],
+        }),
+      };
+    },
   });
 }
 

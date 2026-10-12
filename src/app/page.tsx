@@ -23,7 +23,14 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 }
 
 export default async function Page() {
-  const latestPosts = (await getBlogPosts()).slice(0, 3);
+  const posts = await getBlogPosts();
+  const latestPosts = posts.slice(0, 3);
+  const chatPosts = posts.map((post) => ({
+    slug: post.slug,
+    title: post.metadata.title,
+    summary: post.metadata.summary,
+    publishedAt: post.metadata.publishedAt,
+  }));
 
   return (
     <main className="flex min-h-[100dvh] flex-col space-y-14">
@@ -73,7 +80,7 @@ export default async function Page() {
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
           <div className="mt-4">
-            <Chat />
+            <Chat posts={chatPosts} />
           </div>
         </BlurFade>
       </section>

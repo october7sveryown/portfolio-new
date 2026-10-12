@@ -9,6 +9,8 @@ import {
 import { z } from "zod";
 
 import { getModel } from "@/lib/chat/model";
+import { tools } from "@/lib/chat/tools";
+import type { ChatMessage } from "@/lib/chat/types";
 
 export const maxDuration = 30;
 
@@ -24,7 +26,10 @@ export async function POST(req: Request) {
 
   let messages;
   try {
-    messages = await validateUIMessages({ messages: parsed.data.messages });
+    messages = await validateUIMessages<ChatMessage>({
+      messages: parsed.data.messages,
+      tools,
+    });
   } catch {
     return Response.json({ error: "Invalid messages." }, { status: 400 });
   }
@@ -33,12 +38,13 @@ export async function POST(req: Request) {
     model: getModel(),
     instructions:
       "You answer questions about Yash Thaker's work, projects and writing. Keep answers short.",
-    messages: await convertToModelMessages(messages),
+    tools,
+    messages: await convertToModelMessages(messages, { tools }),
     maxOutputTokens: 600,
     stopWhen: isStepCount(3),
   });
 
   return createUIMessageStreamResponse({
-    stream: toUIMessageStream({ stream: result.stream }),
+    stream: toUIMessageStream({ stream: result.stream, tools }),
   });
 }
