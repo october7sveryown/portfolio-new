@@ -3,7 +3,7 @@ import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { simulateReadableStream, type LanguageModel } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
 
-const DEFAULT_MODEL = "z-ai/glm-4.6";
+const DEFAULT_MODEL = "z-ai/glm-5.3-flash";
 
 const MOCK_TEXT =
   "This is **mock mode**: no `OPENROUTER_API_KEY` is set, so this reply is canned. " +

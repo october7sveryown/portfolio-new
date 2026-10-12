@@ -134,7 +134,9 @@ Each step is one commit on `feature/chat`.
 2. Route handler in mock mode; check the stream with `curl`.
 3. Chat UI with text only.
 4. Tools, their part components and skeletons.
-5. Real OpenRouter calls: instructions, provider routing, and choosing the model.
+5. Real OpenRouter calls: instructions and provider routing. Default model is
+   `z-ai/glm-5.3-flash` (cheapest current GLM with tool support); no model
+   comparison for now.
 6. Rate limiting and the other limits.
 7. Polish: mobile, dark mode, accessibility, dock icon.
 8. Verification (below).
@@ -143,8 +145,7 @@ Each step is one commit on `feature/chat`.
 
 - `npx tsc --noEmit` and `npm run build` pass with no `OPENROUTER_API_KEY`.
 - Mock mode: `curl` the route and confirm text and tool parts stream in order.
-- With a key, run the same question set against GLM and Kimi and keep the one
-  that calls tools most reliably:
+- With a key:
   - questions that should trigger each tool (check the tool is actually called,
     not answered in text);
   - normal questions;
@@ -159,7 +160,7 @@ Each step is one commit on `feature/chat`.
 | Variable | Required | Purpose |
 |---|---|---|
 | `OPENROUTER_API_KEY` | for real responses | OpenRouter access. Mock mode is used when unset. |
-| `CHAT_MODEL` | no | OpenRouter model ID, default a GLM model (set after the step 5 comparison) |
+| `CHAT_MODEL` | no | OpenRouter model ID, default `z-ai/glm-5.3-flash` |
 | `UPSTASH_REDIS_REST_URL` | in production | Rate limiting |
 | `UPSTASH_REDIS_REST_TOKEN` | in production | Rate limiting |
 
@@ -171,9 +172,6 @@ Each step is one commit on `feature/chat`.
 
 ## Open decisions
 
-1. **Default model:** GLM or Kimi, decided by the tool-calling comparison in
-   step 5. Claude Haiku stays an option through the same OpenRouter key if
-   neither is reliable enough with tools.
-2. **Voice:** an assistant speaking about Yash, e.g. "Yash is building…"
+1. **Voice:** an assistant speaking about Yash, e.g. "Yash is building…"
    (recommended: it never puts words in his mouth), or first person
    ("I'm building…").

@@ -8,6 +8,7 @@ import {
 } from "ai";
 import { z } from "zod";
 
+import { getInstructions } from "@/lib/chat/instructions";
 import { getModel } from "@/lib/chat/model";
 import { tools } from "@/lib/chat/tools";
 import type { ChatMessage } from "@/lib/chat/types";
@@ -36,12 +37,14 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: getModel(),
-    instructions:
-      "You answer questions about Yash Thaker's work, projects and writing. Keep answers short.",
+    instructions: await getInstructions(),
     tools,
     messages: await convertToModelMessages(messages, { tools }),
     maxOutputTokens: 600,
     stopWhen: isStepCount(3),
+    // One round of tools, then text only: stops the model repeating a call.
+    prepareStep: ({ steps }) =>
+      steps.some((step) => step.toolCalls.length > 0) ? { toolChoice: "none" } : {},
   });
 
   return createUIMessageStreamResponse({
