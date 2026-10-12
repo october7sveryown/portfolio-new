@@ -1,4 +1,3 @@
-import { Chat } from "@/components/chat/chat";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { PostList } from "@/components/post-list";
@@ -8,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { getBlogPosts } from "@/data/blog";
 import { DATA } from "@/data/resume";
-import { ArrowRightIcon, MapPinIcon } from "lucide-react";
+import { ArrowRightIcon, MapPinIcon, MessageCircleIcon } from "lucide-react";
 import Link from "next/link";
 import Markdown from "react-markdown";
 
@@ -23,14 +22,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 }
 
 export default async function Page() {
-  const posts = await getBlogPosts();
-  const latestPosts = posts.slice(0, 3);
-  const chatPosts = posts.map((post) => ({
-    slug: post.slug,
-    title: post.metadata.title,
-    summary: post.metadata.summary,
-    publishedAt: post.metadata.publishedAt,
-  }));
+  const latestPosts = (await getBlogPosts()).slice(0, 3);
 
   return (
     <main className="flex min-h-[100dvh] flex-col space-y-14">
@@ -79,9 +71,14 @@ export default async function Page() {
           </div>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
-          <div className="mt-4">
-            <Chat posts={chatPosts} />
-          </div>
+          <Link
+            href="/chat"
+            className="group mt-3 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <MessageCircleIcon className="size-3.5" />
+            Ask me anything about my work
+            <ArrowRightIcon className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </BlurFade>
       </section>
 

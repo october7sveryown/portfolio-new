@@ -6,12 +6,12 @@ export function PostResults({ slugs, posts }: { slugs: string[]; posts: PostMeta
   if (found.length === 0) return null;
 
   return (
-    <ul className="flex flex-col">
+    <ul className="flex flex-col divide-y rounded-lg border">
       {found.map((post) => (
         <li key={post.slug}>
           <Link
             href={`/blog/${post.slug}`}
-            className="-mx-3 flex flex-col gap-1 rounded-lg px-3 py-2 transition-colors hover:bg-muted"
+            className="flex flex-col gap-1 px-3 py-2.5 transition-colors hover:bg-muted"
           >
             <div className="flex items-baseline justify-between gap-4">
               <span className="font-medium tracking-tight">{post.title}</span>

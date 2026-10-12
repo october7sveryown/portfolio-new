@@ -46,7 +46,8 @@ blog post metadata. This means:
 
 - the model cannot invent project details, links or dates in cards;
 - tool results stay small, which saves tokens on later turns;
-- cards reuse the existing `ProjectCard` and post list styling, so they match the site.
+- results are compact rows (title, date, one line, link), not copies of the
+  full portfolio cards: the chat lists and links, the home page shows detail.
 
 ## Server — `src/app/api/chat/route.ts`
 
@@ -103,14 +104,15 @@ blog post metadata. This means:
 | `chat.tsx` | Client component: `useChat`, message list, status handling (submitted, streaming, ready, error) |
 | `chat-input.tsx` | Auto-growing textarea, Enter to send, stop button while streaming, 3 starter questions when the chat is empty |
 | `message.tsx` | Renders `message.parts`: text through streamdown, tool parts through skeleton then component |
-| `parts/project-results.tsx` | Project cards from keys |
-| `parts/post-results.tsx` | Post links from slugs |
-| `parts/experience-card.tsx` | Work entries |
+| `parts/project-results.tsx` | Project rows from keys |
+| `parts/post-results.tsx` | Post rows from slugs |
+| `parts/experience-card.tsx` | Work rows (company, role, years) |
 | `parts/contact-card.tsx` | Email / socials |
 
-**Placement:** an "Ask me anything about my work…" input under the "Now" line
-in the hero. The first message expands the conversation in place, in a scroll
-area with a capped height. A dock icon scrolls to the input and focuses it.
+**Placement:** a separate `/chat` page. The conversation scrolls with the page
+and the input sticks to the bottom above the dock. The home page links to it
+with an "Ask me anything about my work" link under the "Now" line, and the dock
+has a chat icon.
 
 **Behaviour:**
 - auto-scroll that pauses when the user scrolls up;
@@ -172,8 +174,6 @@ Each step is one commit on `feature/chat`.
 1. **Default model:** GLM or Kimi, decided by the tool-calling comparison in
    step 5. Claude Haiku stays an option through the same OpenRouter key if
    neither is reliable enough with tools.
-2. **Placement:** input in the hero below the "Now" line (recommended), or a
-   pop-up panel opened from the dock.
-3. **Voice:** an assistant speaking about Yash, e.g. "Yash is building…"
+2. **Voice:** an assistant speaking about Yash, e.g. "Yash is building…"
    (recommended: it never puts words in his mouth), or first person
    ("I'm building…").

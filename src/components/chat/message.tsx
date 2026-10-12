@@ -82,12 +82,7 @@ export function Message({ message, streaming, posts }: MessageProps) {
               <ToolState
                 key={i}
                 part={part}
-                skeleton={
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <Skeleton className="h-64" />
-                    <Skeleton className="hidden h-64 sm:block" />
-                  </div>
-                }
+                skeleton={<Skeleton className="h-28" />}
               >
                 {() => <ProjectResults keys={part.output!.keys} />}
               </ToolState>

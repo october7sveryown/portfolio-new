@@ -1,4 +1,3 @@
-import { ResumeCard } from "@/components/resume-card";
 import { workByCompany } from "@/lib/chat/catalog";
 
 export function ExperienceCard({ companies }: { companies: string[] }) {
@@ -6,20 +5,18 @@ export function ExperienceCard({ companies }: { companies: string[] }) {
   if (entries.length === 0) return null;
 
   return (
-    <div className="flex flex-col">
+    <ul className="flex flex-col divide-y rounded-lg border">
       {entries.map((work) => (
-        <ResumeCard
-          key={work.company}
-          logoUrl={work.logoUrl}
-          altText={work.company}
-          title={work.company}
-          subtitle={work.title}
-          href={work.href}
-          badges={work.badges}
-          period={`${work.start.split(" ").pop()} – ${work.end.split(" ").pop()}`}
-          description={work.description}
-        />
+        <li key={work.company} className="flex items-baseline justify-between gap-4 px-3 py-2.5">
+          <div className="flex min-w-0 flex-col">
+            <span className="font-medium tracking-tight">{work.company}</span>
+            <span className="text-muted-foreground">{work.title}</span>
+          </div>
+          <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+            {work.start.split(" ").pop()} – {work.end.split(" ").pop()}
+          </span>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
