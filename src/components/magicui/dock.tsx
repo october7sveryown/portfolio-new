@@ -1,8 +1,14 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import React, { PropsWithChildren, useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
+import React, { useRef } from "react";
 
 export interface DockProps extends VariantProps<typeof dockVariants> {
   className?: string;
@@ -18,6 +24,14 @@ const dockVariants = cva(
   "mx-auto w-max h-full p-2 flex items-end rounded-full border"
 );
 
+// Shared with each DockIcon through context rather than cloned props, so
+// other children (e.g. Separator) never get them passed to the DOM.
+const DockContext = React.createContext<{
+  mouseX: MotionValue<number>;
+  magnification: number;
+  distance: number;
+} | null>(null);
+
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
   (
     {
@@ -31,16 +45,6 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
   ) => {
     const mouseX = useMotionValue(Infinity);
 
-    const renderChildren = () => {
-      return React.Children.map(children, (child: any) => {
-        return React.cloneElement(child, {
-          mouseX: mouseX,
-          magnification: magnification,
-          distance: distance,
-        });
-      });
-    };
-
     return (
       <motion.div
         ref={ref}
@@ -49,7 +53,9 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
         {...props}
         className={cn(dockVariants({ className }))}
       >
-        {renderChildren()}
+        <DockContext.Provider value={{ mouseX, magnification, distance }}>
+          {children}
+        </DockContext.Provider>
       </motion.div>
     );
   }
@@ -58,24 +64,14 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
 Dock.displayName = "Dock";
 
 export interface DockIconProps {
-  size?: number;
-  magnification?: number;
-  distance?: number;
-  mouseX?: any;
   className?: string;
   children?: React.ReactNode;
-  props?: PropsWithChildren;
 }
 
-const DockIcon = ({
-  size,
-  magnification = DEFAULT_MAGNIFICATION,
-  distance = DEFAULT_DISTANCE,
-  mouseX,
-  className,
-  children,
-  ...props
-}: DockIconProps) => {
+const DockIcon = ({ className, children, ...props }: DockIconProps) => {
+  const dock = React.useContext(DockContext);
+  if (!dock) throw new Error("DockIcon must be used inside Dock");
+  const { mouseX, magnification, distance } = dock;
   const ref = useRef<HTMLDivElement>(null);
 
   const distanceCalc = useTransform(mouseX, (val: number) => {

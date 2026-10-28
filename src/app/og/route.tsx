@@ -1,8 +1,6 @@
 import { DATA } from "@/data/resume";
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
-
 // Social preview image. Pass ?title= for blog posts; defaults to name + tagline.
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
