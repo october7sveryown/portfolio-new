@@ -16,7 +16,7 @@ export const DATA = {
   // Longer than the home page summary; used by the chat assistant.
   about:
     "Full-stack developer with 6+ years of experience designing, building and shipping production software across Python and Java stacks. Currently a Senior Software Developer at FunnelX, building a conversational AI SaaS product with Generative AI and voice features. Before that, spent four years building Java, Spring Boot and Angular full-stack software at MCX, a financial (commodity) exchange. Comfortable across Python, TypeScript and Java, has integrated Gen AI APIs (OpenAI, Gemini) into production applications, and has mentored other developers.",
-  avatarUrl: "/profile-pic.png",
+  avatarUrl: "/profile.webp",
   skills: [
     "Python",
     "Typescript",

@@ -3,12 +3,12 @@ import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { PostList } from "@/components/post-list";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { getBlogPosts } from "@/data/blog";
 import { DATA } from "@/data/resume";
 import { CHAT_ENABLED } from "@/lib/chat/enabled";
 import { ArrowRightIcon, MapPinIcon, MessageCircleIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
 
@@ -53,10 +53,17 @@ export default async function Page() {
             </BlurFade>
           </div>
           <BlurFade delay={BLUR_FADE_DELAY}>
-            <Avatar className="size-20 border sm:size-28">
-              <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
-              <AvatarFallback>{DATA.initials}</AvatarFallback>
-            </Avatar>
+            <div className="w-24 rotate-2 overflow-hidden rounded-xl shadow-md ring-1 ring-border transition-transform duration-300 hover:rotate-0 sm:w-32">
+              <Image
+                src={DATA.avatarUrl}
+                alt={DATA.name}
+                width={1376}
+                height={1824}
+                sizes="(min-width: 640px) 128px, 96px"
+                preload
+                className="aspect-[3/4] h-auto w-full object-cover"
+              />
+            </div>
           </BlurFade>
         </div>
         {CHAT_ENABLED && (
