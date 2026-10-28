@@ -46,8 +46,6 @@ test("dock navigates between pages", async ({ page }) => {
 
   await dockLink("/blog").click();
   await expect(page).toHaveURL("/blog");
-  await dockLink("/chat").click();
-  await expect(page).toHaveURL("/chat");
   await dockLink("/").click();
   await expect(page).toHaveURL("/");
 });

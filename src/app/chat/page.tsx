@@ -1,6 +1,8 @@
 import { Chat } from "@/components/chat/chat";
 import { getBlogPosts } from "@/data/blog";
+import { CHAT_ENABLED } from "@/lib/chat/enabled";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Chat",
@@ -8,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ChatPage() {
+  if (!CHAT_ENABLED) notFound();
+
   const posts = (await getBlogPosts()).map((post) => ({
     slug: post.slug,
     title: post.metadata.title,

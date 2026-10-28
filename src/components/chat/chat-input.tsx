@@ -8,8 +8,9 @@ export const MAX_MESSAGE_LENGTH = 500;
 
 const STARTERS = [
   "What are you building right now?",
+  "What have you built with LLMs and voice AI?",
   "Show me your AI projects",
-  "Summarize your Claude Code post",
+  "Which certifications do you have?",
 ];
 
 interface ChatInputProps {

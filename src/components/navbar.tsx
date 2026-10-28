@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
+import { CHAT_ENABLED } from "@/lib/chat/enabled";
 import { cn } from "@/lib/utils";
 import { HomeIcon, MessageCircleIcon, NotebookIcon } from "lucide-react";
 import Link from "next/link";
@@ -53,25 +54,27 @@ export default function Navbar() {
             </TooltipContent>
           </Tooltip>
         </DockIcon>
-        <DockIcon>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href="/chat"
-                aria-label="Chat"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon" }),
-                  "size-12"
-                )}
-              >
-                <MessageCircleIcon className="size-4" />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Ask me anything</p>
-            </TooltipContent>
-          </Tooltip>
-        </DockIcon>
+        {CHAT_ENABLED && (
+          <DockIcon>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/chat"
+                  aria-label="Chat"
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "icon" }),
+                    "size-12"
+                  )}
+                >
+                  <MessageCircleIcon className="size-4" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Ask me anything</p>
+              </TooltipContent>
+            </Tooltip>
+          </DockIcon>
+        )}
         <Separator orientation="vertical" className="h-full" />
         {Object.entries(DATA.contact.social).map(([name, social]) => (
           <DockIcon key={name}>

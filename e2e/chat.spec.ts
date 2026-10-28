@@ -1,9 +1,28 @@
+import { CHAT_ENABLED } from "../src/lib/chat/enabled";
 import { expect, test } from "./fixtures";
+
+test.describe("chat disabled", () => {
+  test.skip(CHAT_ENABLED, "chat is enabled");
+  test.use({ allowHttpErrors: true });
+
+  test("page and API return 404", async ({ page, request }) => {
+    const res = await page.goto("/chat");
+    expect(res?.status()).toBe(404);
+    expect((await request.post("/api/chat", { data: {} })).status()).toBe(404);
+  });
+
+  test("no links point to the chat", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator('a[href="/chat"]')).toHaveCount(0);
+  });
+});
+
 
 // None of these reach the model: the UI tests mock /api/chat, and the API
 // tests send requests that are rejected before the model is called.
 
 test.describe("chat page", () => {
+  test.skip(!CHAT_ENABLED, "chat is hidden");
   test.beforeEach(async ({ page }) => {
     await page.goto("/chat");
   });
@@ -24,6 +43,7 @@ test.describe("chat page", () => {
 });
 
 test.describe("chat errors", () => {
+  test.skip(!CHAT_ENABLED, "chat is hidden");
   test.use({ allowHttpErrors: true });
 
   test("shows the API error and lets the user clear", async ({ page }) => {
@@ -46,6 +66,7 @@ test.describe("chat errors", () => {
 });
 
 test.describe("chat API", () => {
+  test.skip(!CHAT_ENABLED, "chat is hidden");
   const userMessage = (text: string) => ({
     id: "m1",
     role: "user",

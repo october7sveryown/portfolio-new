@@ -1,5 +1,6 @@
 import {
   convertToModelMessages,
+  createUIMessageStream,
   createUIMessageStreamResponse,
   isStepCount,
   streamText,
@@ -8,6 +9,8 @@ import {
 } from "ai";
 import { z } from "zod";
 
+import { looksLikeAttack, refusal } from "@/lib/chat/guard";
+import { CHAT_ENABLED } from "@/lib/chat/enabled";
 import { getInstructions } from "@/lib/chat/instructions";
 import { getModel } from "@/lib/chat/model";
 import { checkRateLimit, clientIp } from "@/lib/chat/rate-limit";
@@ -24,6 +27,10 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: Request) {
+  if (!CHAT_ENABLED) {
+    return Response.json({ error: "Not found." }, { status: 404 });
+  }
+
   const limit = await checkRateLimit(clientIp(req));
   if (!limit.ok) {
     return Response.json({ error: limit.message }, { status: 429 });
@@ -44,6 +51,11 @@ export async function POST(req: Request) {
     return Response.json({ error: "Invalid messages." }, { status: 400 });
   }
 
+  // Only the server sets instructions; a client-sent system message is an injection attempt.
+  if (messages.some((m) => m.role === "system")) {
+    return Response.json({ error: "Invalid messages." }, { status: 400 });
+  }
+
   const tooLong = messages.some(
     (m) =>
       m.role === "user" &&
@@ -60,6 +72,13 @@ export async function POST(req: Request) {
   let recent = messages.slice(-MAX_HISTORY);
   while (recent.length > 1 && recent[0].role !== "user") recent = recent.slice(1);
 
+  const userText = recent
+    .filter((m) => m.role === "user")
+    .flatMap((m) => m.parts.map((p) => (p.type === "text" ? p.text : "")));
+  if (userText.some(looksLikeAttack)) {
+    return cannedReply(refusal());
+  }
+
   const result = streamText({
     model: getModel(),
     instructions: await getInstructions(),
@@ -73,6 +92,30 @@ export async function POST(req: Request) {
   });
 
   return createUIMessageStreamResponse({
-    stream: toUIMessageStream({ stream: result.stream, tools }),
+    stream: toUIMessageStream({
+      stream: result.stream,
+      tools,
+      // Reasoning often quotes the instructions, so it never leaves the server.
+      sendReasoning: false,
+      onError: (error) => {
+        console.error("Chat stream error", error);
+        return "Something went wrong. Please try again.";
+      },
+    }),
+  });
+}
+
+// A fixed reply streamed like a model answer, so the client renders it normally.
+function cannedReply(text: string) {
+  return createUIMessageStreamResponse({
+    stream: createUIMessageStream<ChatMessage>({
+      execute: ({ writer }) => {
+        writer.write({ type: "start" });
+        writer.write({ type: "text-start", id: "canned" });
+        writer.write({ type: "text-delta", id: "canned", delta: text });
+        writer.write({ type: "text-end", id: "canned" });
+        writer.write({ type: "finish" });
+      },
+    }),
   });
 }
