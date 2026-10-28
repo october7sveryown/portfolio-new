@@ -13,6 +13,7 @@ export async function generateMetadata({
   }>;
 }): Promise<Metadata | undefined> {
   let post = await getPost((await params).slug);
+  if (!post) return;
 
   let {
     title,
